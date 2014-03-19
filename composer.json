@@ -1,0 +1,19 @@
+{
+    "name": "stubenbaines/instagramPhpApi",
+    "type" : "library",
+    "license" : "MIT",
+    "description": "Library to interact with the Instagram API.",
+    "keywords" : ["PHP", "Instagram", "OAuth"],
+    "homepage" : "https://github.com/stubenbaines/instagramPhpApi",
+    "authors" : [
+        {
+            "name" : "Dennis Pierce",
+            "email" : "stubenbaines@gmail.com",
+            "homepage" : "https://github.com/stubenbaines"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*"
+    }
+}

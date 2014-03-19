@@ -51,4 +51,6 @@ Samples
 In the repo there is a file named demo.php which demonstrates some non-authenticated calls.
 demo_auth.php shows some authenticated calls. Replace the client_id with your client ID before running.
 
-
+License
+-----
+Released under the MIT license.

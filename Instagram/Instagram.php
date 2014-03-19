@@ -3,9 +3,11 @@
 /**
  * InstagramAPI
  * PHP library to interact with the Instagram API.
- *
+ * Allows both authenticated and non-authenticated requests.
+ * Credit goes to Facebook PHP SDK and https://github.com/ricardoper/TwitterOAuth for inspiration.
  * 
  * @author Dennis Pierce <github@stubenbaines>
+ * @company Gotham Pixel Factory (www.gothampixelfactory.com)
  * @copyright 2014
  */
 
@@ -27,11 +29,15 @@ class Instagram {
     protected $method = 'GET';
     protected $getParams = array();
 
-    // 
-    function __construct($clientId, $clientSecret = null, $redirectUri = null) {
+    function __construct($clientId = null, $clientSecret = null, $redirectUri = null) {
         if (!in_array('curl', get_loaded_extensions())) {
-            throw new Exception('You need to install cURL, see: http://curl.haxx.se/docs/install.html');
+            throw new \Exception('You need to install cURL, see: http://curl.haxx.se/docs/install.html');
         }
+
+        if (!isset($clientId)) {
+            throw new \Exception('You need to pass at least a clientId.');
+        }
+
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
         $this->redirectUri = $redirectUri;
@@ -133,9 +139,6 @@ class Instagram {
         } else {
             $request .= '&client_id=' . $this->clientId;
         }
-
-        echo $request;
-
         return $request;
         
     } 
@@ -177,10 +180,3 @@ class Instagram {
         return $this->processOutput($response);
     }
 }
-
-class InstagramApi {
-
-
-
-}
-
