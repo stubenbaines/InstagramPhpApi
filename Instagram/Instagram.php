@@ -20,14 +20,14 @@ class Instagram {
     protected $url = 'https://api.instagram.com';
     protected $authUrl = 'https://api.instagram.com/oauth/authorize/';
     protected $accessUrl = 'https://api.instagram.com/oauth/access_token';
-    protected $clientId;
-    protected $clientSecret;
-    protected $redirectUri;
-    protected $accessToken;
+    protected $clientId; // This is always required.
+    protected $clientSecret; // Used when making auth requests.
+    protected $redirectUri; // Used when making auth requests.
+    protected $accessToken; // Replaces clientId when making auth requests.
     protected $user;
     protected $call;
     protected $method = 'GET';
-    protected $getParams = array();
+    protected $params = array(); // URL params passed to the api calls.
 
     function __construct($clientId = null, $clientSecret = null, $redirectUri = null) {
         if (!in_array('curl', get_loaded_extensions())) {
@@ -45,8 +45,7 @@ class Instagram {
 
     /**
      * Step one of an authenticated request to get an access token.
-     * To do that, you need to go through the authorization url. This 
-     * returns the auth url.
+     * To do that, you need to go through the authorization url.
      * @return string The Instagram authentication url.
     */
     public function getAuthUrl() {
@@ -59,6 +58,10 @@ class Instagram {
      * @return string The access token.
      */
     public function getAccessToken($code) {
+        if (!isset($this->clientSecret)) {
+            throw new \Exception('You need a client secret to make authenticated requests.');
+        }
+
         $params = array(
             "client_id" => $this->clientId,
             "client_secret" => $this->clientSecret,
@@ -76,19 +79,22 @@ class Instagram {
         
         $this->accessToken = $response->access_token;
         $this->user = $response->user;
-        
     }
 
+    /**
+     * Returns the user object from the response of the access token request.
+     * @return string The Instagram user object.
+     */
     public function getUser() {
         return $this->user;
     }
 
     /**
-    * Converting parameters array to a single string with encoded values
-    *
-    * @param array $params Input parameters
-    * @return string Single string with encoded values
-    */
+     * Converting parameters array to a single string with encoded values
+     *
+     * @param array $params Input parameters
+     * @return string Single string with encoded values
+     */
     protected function getParams(array $params) {
         $r = '';
 
@@ -114,25 +120,32 @@ class Instagram {
         $this->call = self::VERSION . $endpoint;
 
         if ($getParams !== null && is_array($getParams)) {
-            $this->getParams = $getParams;
+            $this->params = $getParams; // TODO: Pass params rather than stuffing in attribute.
         }
 
         return $this->sendRequest();
     }
 
+    /**
+     * Turns a string response from Instagram into an object.
+     * @param string json response from Instagram.
+     * @return object or array The converted response from a string.
+     */
     protected function processOutput($response) {
         return json_decode($response);
     }
 
     /**
-     * Builds the url.
+     * Builds the url to hit Instagram. Appends params passed in the api call.
      * If access token is available, use that, otherwise try sending the client_id.
+     *
+     * @return string The url request from Instagram.
      */
-    protected function getUrl() {
-        $getParams = '';
-        $getParams = $this->getParams($this->getParams);
+    protected function buildUrl() {
+        $params = '';
+        $params = $this->getParams($this->params);
 
-        $request = $this->url . $this->call . '?' . $getParams;
+        $request = $this->url . $this->call . '?' . $params;
 
         if (isset($this->accessToken)) {
             $request .= '&access_token=' . $this->accessToken;
@@ -147,10 +160,11 @@ class Instagram {
      * Send a request to Instagram.
      *
      * @throws Exception\InstagramException
-     * @return string 
+     * @param array Options.
+     * @return array/object Processed json response into php object/array. 
      */
     protected function sendRequest(array $options = array()) {
-        $url = $this->getUrl();
+        $url = $this->buildUrl();
         
         // Defaults
         $options = array_merge(array(
