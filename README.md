@@ -5,7 +5,8 @@ A PHP Library to make calls to the Instagram API.
 
 Requires
 -----
-*curl
+- php version >= 5.3
+- cURL extension
 
 Usage
 -----
@@ -14,21 +15,22 @@ http://instagram.com/developer/authentication/
 
 The library supports both authenticated calls via an access token and non-auth calls using just a client id.
 
-### Non-authenticated Calls ###
+## Non-authenticated Calls ##
 Many calls to Instagram can be made without an authenticated user. For these calls, just a client id is required.
 Go to http://instagram.com/developer/clients/manage/ to generate a new client id.
 
 Once you have a client id, you can create an instance of the Instaram api object passing in just a client id.
 
-$client_id = '[YOUR CLIENT ID]';
+```$client_id = '[YOUR CLIENT ID]';
 $instagram = new Instagram($client_id);
 // Now execute an api call to grab popular media and store the response.        
 $res = $instagram->get('/media/popular');
 var_dump($res);
+```
 
-### Authenticated Calls ###
+## Authenticated Calls ##
 Making calls as an authenticated user is more complicated in that you need to have the user authorize your application which then gives you an access code which is then sent to Instagram to generate an access code used for all api requests.
-
+```
 $client_id = '[YOUR CLIENT ID]';
 $redirect = '[URL OF YOUR APP THAT HANDLES ACCESS CODES]';
 
@@ -45,6 +47,7 @@ $user = $instagram->getUser();
 
 // Or make authenticated api requests.
 $res = $instagram->get('/v1/media/popular');
+```
 
 Samples
 -----
