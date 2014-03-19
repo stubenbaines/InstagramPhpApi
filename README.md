@@ -38,7 +38,7 @@ $redirect = '[URL OF YOUR APP THAT HANDLES ACCESS CODES]';
 $instagram = new Instagram($client_id, $client_secret, $redirect);
 
 // Get an authorize URL. User will be asked to give your app permission to their Instagram account and redirect back with access code.
-$instagram->getAuthUrl() ?>">Authorize</a>
+$instagram->getAuthUrl();
 
 // Now take the access code and request an access token.
 $instagram->getAccessToken($code);
