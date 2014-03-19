@@ -55,6 +55,7 @@ class Instagram {
     /**
      * Step two of the authentication process.
      * Pass in a code from step one and then make a request to Instagram to get an access token.
+     * @throws InstagramException.
      * @return string The access token.
      */
     public function getAccessToken($code) {
@@ -77,6 +78,13 @@ class Instagram {
             'method' => 'post'
         ));
         
+        if (!isset($response->access_token)) {
+            throw new InstagramException('No access token granted for this user.', 400);
+        }
+
+        if (!isset($response->user)) {
+            throw new InstagramException('No user found.', 400);
+        }
         $this->accessToken = $response->access_token;
         $this->user = $response->user;
     }
@@ -129,10 +137,17 @@ class Instagram {
     /**
      * Turns a string response from Instagram into an object.
      * @param string json response from Instagram.
+     * @throws Exception\InstagramException
      * @return object or array The converted response from a string.
      */
     protected function processOutput($response) {
-        return json_decode($response);
+        $res = json_decode($response);
+
+        // Check for errors from Instagram.
+        if (isset($res->meta) && isset($res->meta->error_message)) {
+            throw new InstagramException($res->meta->error_message, $res->meta->code);
+        }
+        return $res;
     }
 
     /**
@@ -159,7 +174,6 @@ class Instagram {
     /**
      * Send a request to Instagram.
      *
-     * @throws Exception\InstagramException
      * @param array Options.
      * @return array/object Processed json response into php object/array. 
      */

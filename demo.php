@@ -8,7 +8,6 @@ ini_set('display_errors', '1');
 
 
     /* create Instagram class with just client id. These will be unauthed requests. */ 
-    $source = '292905155';
     $client_id = 'YOUR CLIENT ID';
     $instagram = new Instagram($client_id);
     
@@ -30,7 +29,7 @@ ini_set('display_errors', '1');
     $callParams = array(
         'count' => 10
     );
-    $res = $instagram->get('/users/self/feed', $callParams);
+    //$res = $instagram->get('/users/self/feed', $callParams);
     
     $callParams = array(
         'count' => 10
