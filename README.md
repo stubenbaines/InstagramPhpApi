@@ -21,7 +21,8 @@ Go to http://instagram.com/developer/clients/manage/ to generate a new client id
 
 Once you have a client id, you can create an instance of the Instaram api object passing in just a client id.
 
-```$client_id = '[YOUR CLIENT ID]';
+```php
+$client_id = '[YOUR CLIENT ID]';
 $instagram = new Instagram($client_id);
 // Now execute an api call to grab popular media and store the response.        
 $res = $instagram->get('/media/popular');
@@ -30,7 +31,7 @@ var_dump($res);
 
 ## Authenticated Calls ##
 Making calls as an authenticated user is more complicated in that you need to have the user authorize your application which then gives you an access code which is then sent to Instagram to generate an access code used for all api requests.
-```
+```php
 $client_id = '[YOUR CLIENT ID]';
 $redirect = '[URL OF YOUR APP THAT HANDLES ACCESS CODES]';
 
