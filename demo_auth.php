@@ -16,8 +16,8 @@ ini_set('display_errors', '1');
 
     $code = (!empty($_GET['code']))? $_GET['code'] : '';
     
-    $client_id = 'cd87eaebf3f648fab6f814db2b3bc5c7';
-    $client_secret = '39345072958d470b85647fffc8f333fe';
+    $client_id = 'YOUR CLIENT ID';
+    $client_secret = 'YOUR CLIENT SECRET';
     $redirect = 'http://localhost:8081/instagram/demo.php';
 
     $instagram = new Instagram($client_id, $client_secret, $redirect);

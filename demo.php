@@ -9,7 +9,7 @@ ini_set('display_errors', '1');
 
     /* create Instagram class with just client id. These will be unauthed requests. */ 
     $source = '292905155';
-    $client_id = 'cd87eaebf3f648fab6f814db2b3bc5c7';
+    $client_id = 'YOUR CLIENT ID';
     $instagram = new Instagram($client_id);
     
 ?>
