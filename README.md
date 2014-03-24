@@ -47,7 +47,7 @@ $instagram->getAccessToken($code);
 $user = $instagram->getUser();
 
 // Or make authenticated api requests.
-$res = $instagram->get('/v1/media/popular');
+$res = $instagram->get('/media/popular');
 ```
 
 Samples
